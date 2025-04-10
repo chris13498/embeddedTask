@@ -1,0 +1,45 @@
+First thoughts and assumptions:
+
+TEMP (sensor):
+    - based on example: temp sensor provides analog signal which is translated into signed value in ADC 
+
+ADC:
+    - integrated into uC
+    - supports at least 10kHz sample rate (sample every 100 uSs) -> to be configured
+    - timer based interrupt trigger -> to be configured (timer based interrupt for low jitter) 
+
+    - ADC register adresses: 0x30 ...
+
+    - sample depth:
+        RevA - 8 bit would be sufficient to cover the temp range
+        RevB - 12 bit necessary to cover a acceptable temp range
+
+        RevA - 4°C at digital value 0 (temp range 4°C…259°C / 256 steps)
+        RevB - 4°C at digital value 0 (temp range 4.0°C...106.3°C / 1024 steps)
+
+GPIOs (leds):
+    - hardware is designed properly (no current limiting resistors to be activated/deactivated)
+    - LED lights on GPIO high
+    - Register [0,0,0,0,0,0,High/Low,Input/Output,Enable/disable]
+        => No hardware instructions(SET, TOGGLE,...), due to implementation on Desktop (maybe macros?)
+    - GPIO_0 -> Red (Adress: 0x50)
+    - GPIO_1 -> Yellow (Adress: 0x51)
+    - GPIO_2 -> Green (Adress: 0x52)
+
+
+EEPROM:
+    - hardware abstraction for i2c interface 
+    - storage adressing: 1 Byte
+    - storage size: 256 Byte (0x00...0xFF)
+
+    - external via I2C
+    - choosen I2C address: 0x50 + Write(0) / Read(1)
+    - I2C buffer size: 1 Byte
+    - HW serial read through iteration (no sequential read implemented)
+    
+    Fragmentation:
+    - Byte 0: Hardware revision
+    - Byte 1-8: Hardware serial number 
+    
+
+
