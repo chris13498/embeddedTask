@@ -1,0 +1,36 @@
+@startuml
+skinparam backgroundColor #1f4e66
+skinparam class {
+    BackgroundColor #f2a077
+    BorderColor black
+    ArrowColor white
+}
+skinparam rectangle {
+    BackgroundColor #a23b0f
+    BorderColor black
+}
+
+class TemperatureVisualizer
+
+class Configurator
+class Thermometer
+class StatusIndicator
+
+class EEPROM
+class "Temp Sensor"
+class LEDs
+
+TemperatureVisualizer --> Configurator
+TemperatureVisualizer --> Thermometer
+TemperatureVisualizer --> StatusIndicator
+
+'add label "Usage" to Arrow from TemperatureVisualizer to Configurator
+
+
+
+
+Configurator --> EEPROM
+Thermometer --> "Temp Sensor"
+StatusIndicator --> LEDs
+
+@enduml

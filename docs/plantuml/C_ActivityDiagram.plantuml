@@ -1,0 +1,30 @@
+@startuml
+
+title Main Loop Activity Diagram
+
+start
+
+:Initialize Mock MCU Registers;
+:Initialize Mock EEPROM;
+:Initialize EEPROM Module;
+:Read Hardware Revision from EEPROM;
+:Initialize LED Module;
+:Initialize ADC Module (with HW Rev);
+
+while (Application Running?) is (yes)
+  :Wait for ADC Interrupt Flag;
+  ' Hier könnte eine Verzweigung für Real vs. Simulation sein
+  ' if (INTERRUPT_SIMULATION == 1) then (yes)
+  '  :Simulate ADC Interrupt;
+  ' else (no)
+  '  :Wait for Hardware Interrupt;
+  ' endif
+  :Clear ADC Interrupt Flag;
+  :Get Temperature from ADC (with HW Rev);
+  :Print Temperature;
+  :Apply State Machine Logic (with temp);
+endwhile (no)
+
+stop
+
+@enduml

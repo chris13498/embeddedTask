@@ -1,0 +1,46 @@
+@startuml
+title Sequence Diagram: Temperature Reading Cycle
+
+participant "main" as Main
+participant "ADC/ISR" as ISR order 10
+participant "adc" as ADC order 20
+participant "statemachine" as SM order 30
+participant "led" as LED order 40 
+' Annahme: Statemachine steuert LED
+
+activate Main
+
+group ADC Interrupt Handling
+    ISR -> Main : Signal Interrupt (or simulated)
+    activate ISR
+    deactivate ISR
+    Main -> ISR : Clear Interrupt Flag
+    activate ISR
+    deactivate ISR
+end
+
+group Temperature Reading
+    Main -> ADC : adc_get_temp(hw_rev)
+    activate ADC
+    ' ADC interagiert intern mit Hardware (nicht gezeigt)
+    ADC --> Main : return temperature
+    deactivate ADC
+end
+
+Main -> Main : Print Temperature
+
+group State Machine Update
+    Main -> SM : apply_state_machine(temp)
+    activate SM
+    ' Annahme: State Machine entscheidet über LED-Status
+    SM -> LED : set_led_state(...)
+    activate LED
+    deactivate LED
+    ' Weitere Aktionen der State Machine (nicht gezeigt)
+    deactivate SM
+end
+
+' Loop back to waiting state implied by Activity Diagram
+deactivate Main
+
+@enduml

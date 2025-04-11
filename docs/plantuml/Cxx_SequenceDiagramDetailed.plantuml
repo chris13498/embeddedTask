@@ -1,0 +1,68 @@
+@startuml
+actor User
+participant ":main" as main
+participant "tempVisualizer:TemperatureVisualizer" as TV
+participant ":Configurator" as Conf
+participant ":Thermometer" as Therm
+participant ":StatusIndicator" as Stat
+
+User -> main : führt Programm aus
+activate main
+
+main -> TV ** : new() / <<create>>
+note right of TV : Annahme: Konstruktor erstellt ggf.\nInstanzen von Conf, Therm, Stat
+
+main -> TV : init()
+activate TV 
+' Activation for init() call
+    TV -> Conf : loadConfiguration()
+    activate Conf
+    Conf --> TV : configurationData 
+    deactivate Conf
+
+    TV -> Therm : initializeSensor()
+    activate Therm
+    Therm --> TV : success
+    deactivate Therm
+
+    TV -> Stat : setInitialState("Initializing")
+    activate Stat
+    Stat --> TV 
+    deactivate Stat
+deactivate TV 
+
+main -> TV : run()
+activate TV 
+    loop ' Annahme: Hauptschleife in run()
+        TV -> TV : waitForAdcInterruptFlag()
+        TV -> Therm : readTemperature()
+        activate Therm
+        Therm --> TV : currentTemperature
+        deactivate Therm
+
+        TV -> TV : processTemperature(currentTemperature)
+
+        ' Annahme: Basierend auf der Temperatur wird der Status aktualisiert
+        alt Temperature OK
+            TV -> Stat : showStatus("OK", currentTemperature)
+            activate Stat
+            Stat --> TV 
+            deactivate Stat
+        else Temperature Warning
+            TV -> Stat : showStatus("Warning", currentTemperature)
+            activate Stat
+            Stat --> TV 
+            deactivate Stat
+        else Temperature Critical
+            TV -> Stat : showStatus("Critical", currentTemperature)
+            activate Stat
+            Stat --> TV 
+            deactivate Stat
+        end
+    end
+' ... Programm läuft bis zur Beendigung ...
+' Optional: Deaktivierungen für run() und main, wenn das Ende explizit dargestellt werden soll
+' deactivate TV
+' deactivate main
+
+@enduml

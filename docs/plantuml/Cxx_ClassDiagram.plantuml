@@ -1,0 +1,29 @@
+@startuml
+class main <<function>> {
+  +main()
+}
+
+class TemperatureVisualizer {
+  +init()
+  +run()
+  .. other methods/attributes ..
+}
+
+class Configurator {
+ .. methods/attributes ..
+}
+
+class Thermometer {
+ .. methods/attributes ..
+}
+
+class StatusIndicator {
+ .. methods/attributes ..
+}
+
+main ..> TemperatureVisualizer : <<creates>> & <<uses>>
+TemperatureVisualizer ..> Configurator : <<uses>> (inferred)
+TemperatureVisualizer ..> Thermometer : <<uses>> (inferred)
+TemperatureVisualizer ..> StatusIndicator : <<uses>> (inferred)
+
+@enduml

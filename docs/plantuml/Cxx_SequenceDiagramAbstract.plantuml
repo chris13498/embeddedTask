@@ -1,0 +1,28 @@
+@startuml
+actor User
+participant ":main" as main
+participant "tempVisualizer:TemperatureVisualizer" as TV
+
+User -> main : executes program
+activate main
+
+main -> TV ** : new() / <<create>>
+activate TV
+
+main -> TV : init()
+activate TV
+' Hier würden interne Aufrufe von init() stattfinden,
+' z.B. an Configurator, Thermometer etc. (Code fehlt)
+deactivate TV
+
+main -> TV : run()
+activate TV
+' Hier startet die Hauptlogik des Visualizers,
+' vermutlich eine Schleife mit Aufrufen an Thermometer,
+' StatusIndicator etc. (Code fehlt)
+' ... Programm läuft ...
+' Annahme: run() kehrt nicht zurück, bis das Programm beendet wird
+' deactivate TV
+' deactivate main
+
+@enduml

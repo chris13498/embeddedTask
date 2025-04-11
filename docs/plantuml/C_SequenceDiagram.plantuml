@@ -1,0 +1,36 @@
+@startuml
+skinparam componentStyle uml2
+
+package "TemperatureVisualizer" {
+
+  [main] as MainApp
+
+  component adc as "ADC Module"
+  component eeprom as "EEPROM Module"
+  component led as "LED Module"
+  component statemachine as "State Machine"
+  component mcu_registers as "MCU Registers (Mock/HW)"
+
+  ' --- Abhängigkeiten basierend auf main.c ---
+  MainApp --> adc : uses >
+  MainApp --> eeprom : uses >
+  MainApp --> led : uses >
+  MainApp --> statemachine : uses >
+
+  ' --- Angenommene Abhängigkeiten (da Implementierung fehlt) ---
+  ' ADC, EEPROM und LED benötigen wahrscheinlich Zugriff auf MCU-Register
+  adc ..> mcu_registers : uses (hardware access) >
+  eeprom ..> mcu_registers : uses (hardware access) >
+  led ..> mcu_registers : uses (hardware access) >
+
+  ' Die State Machine könnte die LEDs steuern
+  statemachine ..> led : uses (optional) >
+
+  ' ADC Initialisierung benötigt den HW-Rev vom EEPROM (über main vermittelt)
+  ' main liest EEPROM und gibt Info an adc_init weiter
+  ' Dieser Pfeil zeigt die konzeptionelle Abhängigkeit der ADC-Logik von der HW-Rev
+   adc ..> eeprom : uses hw_rev indirectly via main >
+
+}
+
+@enduml

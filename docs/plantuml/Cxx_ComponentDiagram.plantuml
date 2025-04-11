@@ -1,0 +1,37 @@
+@startuml
+artifact "main.cpp" as main_cpp
+artifact "configurator.cpp" as conf_cpp
+artifact "thermometer.cpp" as thermo_cpp
+artifact "statusindicator.cpp" as status_cpp
+artifact "temperaturevisualizer.cpp" as tv_cpp
+folder include {
+  artifact "temperaturevisualizer.hpp" as tv_hpp
+  artifact "configurator.hpp" as conf_hpp
+  artifact "thermometer.hpp" as thermo_hpp
+  artifact "statusindicator.hpp" as status_hpp
+}
+
+component [TemperatureVisualizer] <<Executable>> as Exec
+
+Exec ..( main_cpp
+Exec ..( conf_cpp
+Exec ..( thermo_cpp
+Exec ..( status_cpp
+Exec ..( tv_cpp
+
+main_cpp ..> tv_hpp
+main_cpp ..> conf_hpp
+main_cpp ..> thermo_hpp
+main_cpp ..> status_hpp
+
+' Annahmen über Abhängigkeiten der Implementierungsdateien
+tv_cpp ..> tv_hpp
+tv_cpp ..> conf_hpp
+tv_cpp ..> thermo_hpp
+tv_cpp ..> status_hpp
+
+conf_cpp ..> conf_hpp
+thermo_cpp ..> thermo_hpp
+status_cpp ..> status_hpp
+
+@enduml
