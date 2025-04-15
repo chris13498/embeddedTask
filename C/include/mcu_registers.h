@@ -12,7 +12,7 @@ extern volatile uint8_t mock_mcu_registers[256];
 #define ADC_VAL_REG_LOW             (*(volatile uint8_t *)&mock_mcu_registers[0x32])
 
 #define ADC_RESOLUTION_10BIT        0x20
-#define ADC_RESOLUTION_8BIT_MASK    0x00
+#define ADC_RESOLUTION_8BIT_MASK    ~0x20
 #define ADC_TRIGGER_CLK_MASK        ~0x08 //0xF7
 #define ADC_ISR_CLEAR               0x04
 #define ADC_ISR_ENABLE              0x02

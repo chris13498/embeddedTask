@@ -22,15 +22,15 @@ void adc_init(uint8_t hw_rev) {
 
     // Initialize Timer
     printf("[ADC-CLOCK] Configure/Enable Clk0\n");
-    CLK0_CONFIG_REG &= CLK_FREQ_10KHZ; // Set clock frequency to 10kHz
+    CLK0_CONFIG_REG |= CLK_FREQ_10KHZ; // Set clock frequency to 10kHz
     CLK0_CONFIG_REG |= CLK_ENABLE;    // Enable clock
 
     // Select ADC clock
-    ADC_CONFIG_REG &= ADC_TRIGGER_CLK_MASK;
+    ADC_CONFIG_REG |= ADC_TRIGGER_CLK_MASK;
 
     // Configure ADC resolution based on hardware revision
     if (hw_rev == 0) {
-        ADC_CONFIG_REG = ADC_RESOLUTION_10BIT; // 10-bit resolution
+        ADC_CONFIG_REG |= ADC_RESOLUTION_10BIT; // 10-bit resolution
     } else {
         ADC_CONFIG_REG &= ADC_RESOLUTION_8BIT_MASK; // 8-bit resolution
     }
@@ -59,7 +59,7 @@ float adc_get_temp(uint8_t hw_rev) {
 // ADC interrupt handler (static function)
 static void adc_IRQHandler() {
     // Clear interrupt flag
-    ADC_CONFIG_REG &= ADC_ISR_CLEAR;
+    ADC_CONFIG_REG |= ADC_ISR_CLEAR;
 
     // Read ADC value from high and low registers
     adc_value = ADC_VAL_REG_HIGH << 8 | ADC_VAL_REG_LOW;
