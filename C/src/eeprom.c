@@ -22,7 +22,7 @@ uint8_t eeprom_read(uint8_t addr) {
 // Mock EEPROM data
 void eeprom_mock(uint8_t revision, const char* serial) {
     eeprom_memory_mock[EEPROM_HW_REV_ADDR] = revision;
-    strncpy((char*)eeprom_memory_mock, serial, 8);
+    strncpy((char*)eeprom_memory_mock + 1, serial, 8);
     printf("[EEPROM] initialize mocked revision %X\n", revision);
     printf("[EEPROM] initialize mocked serial %s\n", serial);
 }
